@@ -3,19 +3,27 @@ import { createSlice } from "@reduxjs/toolkit";
 const movieSlice = createSlice({
     name: "movie",
     initialState: {
-        movieList: [],
-        movie: {}
+        moviesList: [],
+        movie: {},
     },
     reducers: {
         getMovies(name){
-            return name
+            return name;
         },
-        setMovie: (state,action)=>{
-            state.movieList = action.payload
+        setMovies: (state,action)=>{
+            state.moviesList = action.payload;
+        },
+        getMovie(id) {
+            return id;
+
+        },
+        setMovie: (state, action) =>{
+            state.movie = action.payload;
+
         }
-    }
+    },
 });
 
-export const {getMovies , setMovies} = movieSlice.actions;
+export const {getMovies , setMovies , setMovie , getMovie} = movieSlice.actions;
 
 export default movieSlice.reducer;

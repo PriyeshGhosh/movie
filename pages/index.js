@@ -1,73 +1,44 @@
-import Head from "next/head";
-import Movies from "./movies";
+
 import React, { useEffect, useState } from "react";
-import { BsSearch } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
-import { useUser } from "@auth0/auth0-react";
+import { useUser } from "@auth0/nextjs-auth0";
+import Search from "../components/search";
 import { getMovies, setMovies } from "../redux/features/movieSlice";
+import { fetchMovies } from "./../redux/api";
+import MovieList from '../components/moviesList';
+
 
 export default function Home() {
-  const { user, isLoadingcc, error } = useUser();
+  const { user, isLoading, error } = useUser();
+  console.log(fetchMovies);
 
-  const [name, setName] = useState();
   // const search = useSelector(state => state.search);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getMovies(name));
-  }, [name]);
-  const {
-    movieList: { Error: errors },
-  } = useSelector((state) => ({ ...state.movie }));
 
   return (
     <div>
-      <div>
-        {user ? (
-          <>
-          <p>{user.name}</p>
-            <a href="/api/auth/logout"> Logout</a>
-          </>
-        ) : (
-          <a href="/api/auth/logout"> Login</a>
-        )}
-      </div>
+      {user ? (
+        <div>
+          <div>
+            <a
+              className="d-flex justify-content-end pe-4 fs-4 text-decoration-none "
+              href="/api/auth/logout"
+            >
+              Logout
+            </a>
+            <div className="">Welcome {user.name}!</div>
+          </div>
 
-      <Head>
-        <h1 className="px-3 text-center"> Movie app</h1>
-      </Head>
+          <h1 className="px-3 text-center fs-3 text-bg-primary container rounded p-2 "> Movies</h1>
+          <Search />
+          <MovieList/>
+          
+        </div>
+      ) : (
+        <a href="/api/auth/login">Login</a>
+      )}
 
       <>
-        <div>
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="d-flex justify-content-between text-light  bg-light m-auto bg-danger bg-transparent border rounded-4  w-75 m-4 border-2 "
-          >
-            <div className="input-group ">
-              <input
-                onChange={(e) => setName(e.target.value)}
-                className=" d-flex px-3 fw-bold fs-4  border-0 container-fluid form-control me-2 "
-                type="text"
-                placeholder="Search Movies"
-              />
-
-              {errors && (
-                <p className=" fs-3 text-center text-dark">{errors}</p>
-              )}
-            </div>
-            <button className="border-0 w-25 bg-dark rounded-3 me-0 ">
-              <BsSearch />
-            </button>
-          </form>
-        </div>
-        <div className="d-flex justify-content-center">
-          {/* {movieList?.Search?.map((item, index) => (
-          <div >
-
-          </div>
-        ))} */}
-        </div>
+        <div className="d-flex justify-content-around "></div>
       </>
     </div>
   );
